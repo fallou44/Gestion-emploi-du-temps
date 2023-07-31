@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gestionnaire d'emploi du temps</title>
+  <!-- Charger le fichier CSS de Bootstrap -->
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- Charger le fichier JavaScript de Bootstrap -->
+<script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+
+
+<style>
+    .comments {
+      margin-top: 20px;
+    }
+    .comment {
+      margin-bottom: 10px;
+    }
+    
+  </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <div class="shadow-lg p-3 mb-5  bg-body-tertiary ">
+            <h1 class="text-center">Gestionnaire d'emploi du temps DWM2 promo 10 de ISEP-THIES</h1>
+        </div> 
+          </div>
+        </div>
+      </div>
+    <div class="container">
+        <br>
+        <!-- <h1>Emploi du temps</h1> -->
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    À VISITER
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal-dialog modal-fullscreen-xxl-down">
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel" class="text-center">INFOS DE LA SEMAINE </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+        </div>
+        <div class="modal-body">
+            <p>Sinon, ce qu' on faire aussi, au lieu de travailler sur l'emploi du temps comme je l'avais demandé, pour une question de timing, vous travailler sur un mini-projet qui permet à un prof de saisir les informations sur une séance de formation. Si vous regarder le cahier de texte que nous remplissons à la fin de chaque séance de cours, vous trouverez toutes les informations qu'il vous faut. Mais il s'agit essentiellement des infos suivantes:
+                Nom du Département
+                Prénom et non du Prof
+                Nom de l'UEA (Unité d'Enseignement-Apprentissage)
+                Classe
+                Métier
+                La date de la séance
+                Heure début
+                Heure fin  
+                Contenu (résumé) du cours</p><br>Travail à faire:
+                - Ajouter une nouvelle séance
+                - Modifier une séance 
+                - Supprimer une séance
+                - Afficher la liste des toutes les séances
+                - Afficher les séance d'une prof
+                - Afficher les séance d'un mois donnée
+                -ect <br>
+               Il nous demande aussi de découvrir ce framework👇👇👇👇 <br>
+               <p><a href="https://bottlepy.org/docs/dev/" target="_blank">https://bottlepy.org/docs/dev</a></p>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <br><br>
+        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+          <table class="table table-bordered" >
+            <thead class="table-dark">
+              <tr>
+                <th class="text-center">Jour</th>
+                <th class="text-center">Module</th>
+                <th class="text-center">Professeur</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Heures</th>
+                <th class="text-center">salle</th>
+                <th class="text-center">Unité d'enseignement</th>
+                <th class="text-center">Nombre d'heures</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in emplois_du_temps %}
+                <tr>
+                    <td class="text-center"> {{ event[6] }}</td>
+                    <td class="text-center">{{ event[1] }}</td>
+                    <td class="text-center">{{ event[2] }}</td>
+                    <td class="text-center">{{ event[3] }}</td>
+                    <td class="text-center"> {{ event[8] }}<br> - <br> {{ event[9] }}</td>
+                    <td class="text-center"> {{ event[4] }}</td>
+                    <td class="text-center">{{ event[5] }} / {{ event[7] }} H </td>
+                    <td class="text-center">{{ event[7] }} heures</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <BR>
+   </BR> 
+    <div class="container">
+        
+        <form id="comment-form">
+          <div class="form-group">
+            <label for="comment">Laissez un commentaire si vous voulez :</label>
+            <textarea class="form-control" id="comment" rows="3" placeholder="Ex: Maguette diagne : Merci Mr ndiaye, Bien reçu" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-dark">Ajouter</button>
+        </form>
+        
+        <div id="comments-container" class="comments">
+          <h2>Commentaires :</h2>
+          <div id="comments-list"></div>
+        </div>
+      </div>
+    
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <script>
+        // Récupérer les éléments du DOM
+        var commentForm = document.getElementById('comment-form');
+        var commentInput = document.getElementById('comment');
+        var commentsList = document.getElementById('comments-list');
+    
+        // Ajouter un événement submit au formulaire
+        commentForm.addEventListener('submit', function(event) {
+          event.preventDefault(); // Empêcher le rechargement de la page
+          
+          var comment = commentInput.value;
+          if (comment.trim() !== '') {
+            addComment(comment); // Appeler la fonction pour ajouter le commentaire
+            commentInput.value = ''; // Réinitialiser le champ de saisie
+          }
+        });
+    
+        // Fonction pour ajouter un commentaire à la liste
+        function addComment(comment) {
+          var commentElement = document.createElement('div');
+          commentElement.className = 'comment';
+          commentElement.textContent = comment;
+          commentsList.appendChild(commentElement);
+        }
+      </script>
+    <br>
+</body>
+</html>
